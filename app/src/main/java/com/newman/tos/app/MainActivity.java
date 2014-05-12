@@ -25,6 +25,9 @@ import org.springframework.web.client.RestTemplate;
 public class MainActivity extends ActionBarActivity {
 
 
+    private Intent service;
+    private boolean isServiceActivated = false;
+
     private void updateUI(Intent intent) {
         Log.i("MAIN ACTIVITY", "Update UI");
         String grtId = intent.getStringExtra("grtId");
@@ -92,8 +95,14 @@ public class MainActivity extends ActionBarActivity {
         Log.i("MainActivity", "Start New Service button Clicked?");
         if (view.getId() == R.id.button1) {
             Log.i("MainActivity", "button1");
-            Intent service = new Intent(this, MyService.class);
-            startService(service);
+            if (!isServiceActivated) {
+                service = new Intent(getApplicationContext(), MyService.class);
+                getApplicationContext().startService(service);
+                isServiceActivated = true;
+
+            } else {
+                Log.i("MainActivity", "Service already started");
+            }
 
         }
     }
@@ -105,7 +114,10 @@ public class MainActivity extends ActionBarActivity {
         Log.i("MainActivity", "STOP New Service button Clicked?");
         if (view.getId() == R.id.button2) {
             Log.i("MainActivity", "button2");
-            stopService(new Intent(this, MyService.class));
+
+            service.putExtra("shutdown", true);
+            getApplicationContext().stopService(service);
+
 
 
         }

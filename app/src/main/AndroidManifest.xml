@@ -20,10 +20,12 @@
         </activity>
         <service
             android:name="MyService"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/service_name"
+
+            android:exported="false"
             >
         </service>
     </application>
 
 </manifest>
+    <!--android:icon="@drawable/ic_launcher"
+        android:label="@string/service_name"-->
