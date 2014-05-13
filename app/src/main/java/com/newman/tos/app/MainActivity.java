@@ -30,12 +30,12 @@ public class MainActivity extends ActionBarActivity {
 
     private void updateUI(Intent intent) {
         Log.i("MAIN ACTIVITY", "Update UI");
-        String grtId = intent.getStringExtra("grtId");
-        if (grtId != null) {
-            Toast.makeText(getApplicationContext(), " Greeted Broadcast !" + grtId, Toast.LENGTH_LONG).show();
-            Log.i("Main activity", grtId);
+        String status = intent.getStringExtra("status");
+        if (status != null) {
+            Toast.makeText(getApplicationContext(), " Greeted Broadcast !" + status, Toast.LENGTH_LONG).show();
+            Log.i("Main activity", status);
         } else {
-            Toast.makeText(getApplicationContext(), " Null greet ID!" + grtId, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), " Null greet ID!" + status, Toast.LENGTH_LONG).show();
         }
 
 
@@ -97,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
             Log.i("MainActivity", "button1");
             if (!isServiceActivated) {
                 service = new Intent(getApplicationContext(), MyService.class);
-                getApplicationContext().startService(service);
+                startService(service);
                 isServiceActivated = true;
 
             } else {
@@ -116,7 +116,7 @@ public class MainActivity extends ActionBarActivity {
             Log.i("MainActivity", "button2");
 
             service.putExtra("shutdown", true);
-            getApplicationContext().stopService(service);
+            stopService(service);
 
 
 

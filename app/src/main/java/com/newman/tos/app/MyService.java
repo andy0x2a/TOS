@@ -13,87 +13,54 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class MyService extends
-//        Service {
-        IntentService {
+        Service {
+//        IntentService {
 
 
     private boolean isStarted = false;
     private boolean receivedShutdown = false;
 
     public static final String BROADCAST_ACTION = "com.newman.tos.app.myservice.broadcastaction";
+    private final BooleHolder boolHolder = new BooleHolder();
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
-    public MyService(String name) {
-        super(name);
-    }
 
     public MyService() {
-        super(null);
-    }
-
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-
-        doService(intent, 0);
 
     }
 
 
     private void doService(final Intent intent, int startId) {
 
-        Log.i("MyService", "starting runnable");
-        Runnable r = new Runnable() {
-            public void run() {
-
-                Log.i("MyService", "sleeping");
-                int ctr = 0;
-                while (ctr++ < 10) {
-                    Log.i("MyService", "ctr " + ctr);
-                    boolean shutdown = intent.getBooleanExtra("shutdown", false);
-                    Log.i("Runnable:" , "..." + shutdown);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                Log.i("Runnable", "waking");
-                stopSelf();
-            }
-        };
-
-        Thread t = new Thread(r);
-           t.run();
-
 
         Log.i("MyService", "called, state = " + isStarted);
 
         if (!isStarted) {
-            new HttpRequestTask(getApplicationContext()).execute();
-            Toast.makeText(this, " Service Started", Toast.LENGTH_LONG).show();
+            new HttpRequestTask(getApplicationContext(), boolHolder).execute();
+            Log.i("MyService", "Started new HRT");
             isStarted = true;
         }
 
 
     }
 
-    public boolean isReceivedShutdown() {
-        return receivedShutdown;
+
+    public class BooleHolder {
+
+        Boolean isActive = true;
+
+        public Boolean getIsActive() {
+            return isActive;
+        }
+
+        public void setIsActive(Boolean isActive) {
+            this.isActive = isActive;
+        }
+
+
     }
 
-    public void setReceivedShutdown(boolean receivedShutdown) {
-        this.receivedShutdown = receivedShutdown;
-    }
 
-
-
-   /*  Regular service code, not IntentService
-   @Override
+    @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
@@ -114,5 +81,5 @@ public class MyService extends
     public void onDestroy() {
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
 
-    }*/
+    }
 }
